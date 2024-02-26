@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Management System</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container my-5">
+    <h1 class="text-center">My Books</h1>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover align-middle">
+            <thead class="table-primary">
+            <tr>
+                <th>
+                    <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDirection=' + ${reverseSortDirection}}"># ID</a>
+                </th>
+                <th>
+                    <a th:href="@{'/page/' + ${currentPage} + '?sortField=title&sortDirection=' + ${reverseSortDirection}}">Title</a>
+                </th>
+                <th>
+                    <a th:href="@{'/page/' + ${currentPage} + '?sortField=author&sortDirection=' + ${reverseSortDirection}}">Author</a>
+                </th>
+                <th>
+                    <a th:href="@{'/page/' + ${currentPage} + '?sortField=price&sortDirection=' + ${reverseSortDirection}}">Price</a>
+                </th>
+                <th>
+                    <a th:href="@{'/page/' + ${currentPage} + '?sortField=available&sortDirection=' + ${reverseSortDirection}}">Available</a>
+                </th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="books : ${listBooks}">
+                <td th:text="${books.id}"></td>
+                <td th:text="${books.title}"></td>
+                <td th:text="${books.author}"></td>
+                <td th:text="${books.price}"></td>
+                <td th:text="${books.available}"></td>
+                <td class="text-center">
+                    <a th:href="@{/addToMyList/{id}(id=${books.id})}" class="btn btn-success btn-sm m-1" role="button">Add to MyList</a>
+                    <a th:href="@{/showFormForUpdate/{id}(id=${books.id})}" class="btn btn-info btn-sm m-1" role="button">Update</a>
+                    <a th:href="@{/deleteBook/{id}(id=${books.id})}" class="btn btn-danger btn-sm m-1" role="button">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${totalPages > 1}">
+        <div class="row">
+            <div class="col-lg-6">
+                <a class="btn btn-light btn-sm border" th:if="${currentPage > 1}" th:href="@{'/'}">&laquo; First</a>
+                <button class="btn btn-light btn-sm border" th:unless="${currentPage > 1}" disabled>&laquo; First</button>
+                <a class="btn btn-light btn-sm border" th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">&lsaquo; Previous</a>
+                <button class="btn btn-light btn-sm border" th:unless="${currentPage > 1}" disabled>&lsaquo; Previous</button>
+                <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <a class="btn btn-light btn-sm border" th:if="${currentPage != i}" th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">[[${i}]]</a>
+                    <a class="btn btn-secondary btn-sm border pe-none" th:unless="${currentPage != i}">[[${i}]]</a>
+                </span>
+                <a class="btn btn-light btn-sm border" th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">Next &rsaquo;</a>
+                <button class="btn btn-light btn-sm border" th:unless="${currentPage < totalPages}" disabled>Next &rsaquo;</button>
+                <a class="btn btn-light btn-sm border" th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">Last &raquo;</a>
+                <button class="btn btn-light btn-sm border" th:unless="${currentPage < totalPages}" disabled>Last &raquo;</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
